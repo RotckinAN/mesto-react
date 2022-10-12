@@ -6,32 +6,32 @@ import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 
 function App() {
-    const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
-    const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
-    const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
-    const [selectedCard, setSelectedCard] = React.useState ({src: '#', alt: '#', state: false});
+    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+    const [selectedCard, setIsSelectedCard] = React.useState ({src: '#', alt: '#', state: false});
 
     function handleEditProfileClick() {
-        setEditProfilePopupOpen(true)
+        setIsEditProfilePopupOpen(true)
     }
 
     function handleAddPlaceClick() {
-        setAddPlacePopupOpen(true)
+        setIsAddPlacePopupOpen(true)
     }
 
     function handleEditAvatarClick() {
-        setEditAvatarPopupOpen(true)
+        setIsEditAvatarPopupOpen(true)
     }
 
     function closeAllPopups() {
-        setEditProfilePopupOpen(false);
-        setAddPlacePopupOpen(false);
-        setEditAvatarPopupOpen(false);
-        setSelectedCard({src: '#', alt: '#', state: false})
+        setIsEditProfilePopupOpen(false);
+        setIsAddPlacePopupOpen(false);
+        setIsEditAvatarPopupOpen(false);
+        setIsSelectedCard({src: '#', alt: '#', state: false})
     }
 
     function handleCardClick(props) {
-        setSelectedCard(
+        setIsSelectedCard(
             {
             alt: props.name,
             src: props.link,
@@ -42,7 +42,6 @@ function App() {
 
     return (
     <div className="page">
-      <>
         <Header />
         <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick}/>
         <Footer />
@@ -82,7 +81,6 @@ function App() {
 
         <PopupWithForm name='confirmDelete' title='Вы уверены?' additionalClassName='popup__content-title_type_confirmDelete' value='Да'/> {/* попап подтверждения удаления карточки */}
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-      </>
     </div>
   );
 }
