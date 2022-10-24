@@ -55,6 +55,10 @@ class Api {
             .then(this._getRequestData())
     }
 
+    changeLikeCardStatus(cardId, isLiked) {
+        return isLiked ? this.putLike(cardId) : this.deleteLike(cardId)
+    }
+
     putLike(cardId) {
         return fetch(`${this._url}cards/${cardId}/likes`, {
             method: 'PUT',

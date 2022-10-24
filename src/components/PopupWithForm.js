@@ -1,15 +1,15 @@
-function PopupWithForm({name, isOpen, onClose, additionalClassName, title, value, children}) {
+function PopupWithForm({name, isOpen, onClose, onSubmit, additionalClassName, title, value, children}) {
     return (
         <div>
             {/* попап редактирования профиля */}
             <div className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}>
                 <div className="popup__container">
                     <button className="popup__close" type="button" onClick={onClose}></button>
-                    <form name={`${name}Form`} className={`popup__content popup__content_type_${name}`}>
+                    <form onSubmit={onSubmit} name={`${name}Form`} className={`popup__content popup__content_type_${name}`}>
                         <h2 className={`popup__content-title ${additionalClassName}`}>{title}</h2>
                         {children}
                         <button type="submit" value={value} className="popup__save-button"
-                                id="save-button" disabled>{value}</button>
+                                id="save-button">{value}</button>
                     </form>
                 </div>
             </div>
