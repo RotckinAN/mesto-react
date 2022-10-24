@@ -2,13 +2,13 @@ import React from 'react';
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import {api} from "../utils/Api";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -17,6 +17,8 @@ function App() {
     const [selectedCard, setIsSelectedCard] = React.useState ({src: '#', alt: '#', state: false});
     const [currentUser, setCurrentUser] = React.useState({});
     const [cards, setCards] = React.useState([]);
+    const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.state;
+    const [isLoading, setIsLoading] = React.useState(false);
 
     React.useEffect(() => {
         api.getUserInfoByRequest()
@@ -29,18 +31,8 @@ function App() {
     }, []);
 
     React.useEffect(() => {
-        api.getInitialCards().
-        then((res) => {
-            setCards(res.map((card) => ({
-                    _id: card._id,
-                    link: card.link,
-                    name: card.name,
-                    likes: card.likes,
-                    owner: card.owner,
-                    createdAt: card.createdAt
-                })
-            ))
-        })
+        api.getInitialCards()
+            .then(setCards)
             .catch((err) => {
                 console.error(err)
             });
@@ -62,14 +54,25 @@ function App() {
         const isLiked = card.likes.some(i => i._id === currentUser._id);
         api.changeLikeCardStatus(card._id, !isLiked)
             .then((newCard) => {
-            setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+            setCards((state) =>
+                state.map((c) => (c._id === card._id ? newCard : c))
+            );
         })
+            .catch((err) => {
+                console.error(err)
+            });
     }
 
     function handleCardDelete(card) {
-        api.deleteCard(card._id).then(() => {
-            setCards(cards.filter(actualCard => actualCard._id !== card._id))
+        api.deleteCard(card._id)
+            .then(() => {
+            setCards((state) =>
+                state.filter((item) =>
+                    item._id !== card._id))
         })
+            .catch((err) => {
+                console.error(err)
+            });
     }
 
     function closeAllPopups() {
@@ -78,6 +81,20 @@ function App() {
         setIsEditAvatarPopupOpen(false);
         setIsSelectedCard({src: '#', alt: '#', state: false})
     }
+
+  React.useEffect(() => {
+      function closeByEsc(evt) {
+          if (evt.key === 'Escape') {
+              closeAllPopups()
+          }
+      }
+      if (isOpen) {
+          document.addEventListener('keydown', closeByEsc);
+          return () => {
+              document.removeEventListener('keydown', closeByEsc)
+          }
+      }
+  }, [isOpen])
 
     function handleCardClick(props) {
         setIsSelectedCard({
@@ -88,6 +105,8 @@ function App() {
     }
 
     function handleUpdateUser(userInfo) {
+        setIsLoading(true);
+
         api.patchProfileInfo(userInfo)
             .then((res) => {
             setCurrentUser(res);
@@ -95,9 +114,14 @@ function App() {
         })
             .catch((err) => {
             console.error(err)})
+            .finally(() => {
+                setIsLoading(false)
+            })
     }
 
     function handleAddPlaceSubmit(newPhoto) {
+        setIsLoading(true);
+
         api.postNewPhoto(newPhoto)
             .then((res) => {
                 setCards([res, ...cards]);
@@ -105,9 +129,14 @@ function App() {
             })
             .catch((err) => {
             console.error(err)})
+            .finally(() => {
+                setIsLoading(false)
+            })
     }
 
     function handleUpdateAvatar(newAvatar) {
+        setIsLoading(true);
+
         api.patchProfileAvatar(newAvatar)
             .then((res) => {
                 setCurrentUser(res);
@@ -115,6 +144,9 @@ function App() {
             })
             .catch((err) => {
                 console.error(err)
+            })
+            .finally(() => {
+                setIsLoading(false)
             })
     }
 
@@ -124,10 +156,10 @@ function App() {
             <Header />
             <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} cards={cards} />
             <Footer />
-            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-            <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlaceSubmit={handleAddPlaceSubmit} />
-            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-            <PopupWithForm name='confirmDelete' title='Вы уверены?' additionalClassName='popup__content-title_type_confirmDelete' value='Да'/> {/* попап подтверждения удаления карточки */}
+            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
+            <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlaceSubmit={handleAddPlaceSubmit} isLoading={isLoading} />
+            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
+            <ConfirmationPopup name='confirmDelete' title='Вы уверены?' additionalClassName='popup__content-title_type_confirmDelete' value='Да'/> {/* попап подтверждения удаления карточки */}
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         </CurrentUserContext.Provider>
     </div>

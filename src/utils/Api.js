@@ -4,6 +4,10 @@ class Api {
         this._headers = options.headers
     }
 
+    _request(url, options) {
+        return fetch(url, options).then(this._getRequestData())
+    }
+
     _getRequestData() {
         return (res) => {
             if (res.ok) {
@@ -14,45 +18,40 @@ class Api {
     }
 
     getUserInfoByRequest() {
-        return fetch(`${this._url}users/me`, {
+        return this._request(`${this._url}users/me`, {
             method: 'GET',
             headers: this._headers
         })
-            .then(this._getRequestData())
     }
 
     getInitialCards() {
-        return fetch(`${this._url}cards`, {
+        return this._request(`${this._url}cards`, {
             method: 'GET',
             headers: this._headers
         })
-            .then(this._getRequestData())
     }
 
     patchProfileInfo(profileInfo) {
-        return fetch(`${this._url}users/me`, {
+        return this._request(`${this._url}users/me`, {
             method: 'PATCH',
             headers: this._headers,
             body: JSON.stringify(profileInfo)
         })
-            .then(this._getRequestData())
     }
 
     postNewPhoto(newPhoto) {
-        return fetch(`${this._url}cards`, {
+        return this._request(`${this._url}cards`, {
             method: 'POST',
             headers: this._headers,
             body: JSON.stringify(newPhoto)
         })
-            .then(this._getRequestData())
     }
 
     deleteCard(cardId) {
-        return fetch(`${this._url}cards/${cardId}`, {
+        return this._request(`${this._url}cards/${cardId}`, {
             method: 'DELETE',
             headers: this._headers,
         })
-            .then(this._getRequestData())
     }
 
     changeLikeCardStatus(cardId, isLiked) {
@@ -60,28 +59,25 @@ class Api {
     }
 
     putLike(cardId) {
-        return fetch(`${this._url}cards/${cardId}/likes`, {
+        return this._request(`${this._url}cards/${cardId}/likes`, {
             method: 'PUT',
             headers: this._headers,
         })
-            .then(this._getRequestData())
     }
 
     deleteLike(cardId) {
-        return fetch(`${this._url}cards/${cardId}/likes`, {
+        return this._request(`${this._url}cards/${cardId}/likes`, {
             method: 'DELETE',
             headers: this._headers,
         })
-            .then(this._getRequestData())
     }
 
     patchProfileAvatar(newAvatar) {
-        return fetch(`${this._url}users/me/avatar`, {
+        return this._request(`${this._url}users/me/avatar`, {
             method: 'PATCH',
             headers: this._headers,
             body: JSON.stringify(newAvatar)
         })
-            .then(this._getRequestData())
     }
 }
 
