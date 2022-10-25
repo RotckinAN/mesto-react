@@ -28,7 +28,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser, isLoading}) {
     }
 
     return (
-        <PopupWithForm name='editProfile' title='Редактировать профиль' value={buttonText} isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit}> {/* попап редактирования профиля */}
+        <PopupWithForm name='editProfile' title='Редактировать профиль' buttonText={buttonText} isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit}> {/* попап редактирования профиля */}
             <label htmlFor="inputName">
                 <input onChange={handleNameChange} value={name || ''} type="text" name="name" className="popup__item popup__item_input_name" autoComplete="off"
                        id="inputName" placeholder="Имя" minLength="2" maxLength="40" required/>

@@ -2,11 +2,13 @@ import PopupWithForm from "./PopupWithForm";
 import React from "react";
 import {useForm} from "../hooks/useForm";
 
+const initialValues = {
+    name: '',
+    link: '',
+}
+
 function AddPlacePopup({isOpen, onClose, onAddPlaceSubmit, isLoading}) {
-    const {values, handleChange, setValues} = useForm({
-        name: '',
-        link: '',
-    });
+    const {values, handleChange, setValues} = useForm(initialValues);
     const buttonText = isLoading ? 'Создание...' : 'Создать';
 
     function handleSubmit(evt) {
@@ -15,14 +17,14 @@ function AddPlacePopup({isOpen, onClose, onAddPlaceSubmit, isLoading}) {
             name: values.name,
             link: values.link
         });
-        setValues({
-            name: '',
-            link: '',
-        })
     }
 
+    React.useEffect(() => {
+        setValues(initialValues)
+    }, [isOpen])
+
     return(
-        <PopupWithForm name='addPicture' title='Новое место' value={buttonText} isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit}> {/* попап добавления новых фото */}
+        <PopupWithForm name='addPicture' title='Новое место' buttonText={buttonText} isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit}> {/* попап добавления новых фото */}
             <label htmlFor="inputPicturePopup">
                 <input onChange={handleChange} type="text" name="name" className="popup__item popup__item_input_pictureName" autoComplete="off"
                        id="inputPicturePopup" value={values.name} placeholder='Название' minLength="2" maxLength="30" required/>

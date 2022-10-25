@@ -159,7 +159,7 @@ function App() {
             <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
             <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlaceSubmit={handleAddPlaceSubmit} isLoading={isLoading} />
             <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
-            <ConfirmationPopup name='confirmDelete' title='Вы уверены?' additionalClassName='popup__content-title_type_confirmDelete' value='Да'/> {/* попап подтверждения удаления карточки */}
+            <ConfirmationPopup /> {/* попап подтверждения удаления карточки */}
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         </CurrentUserContext.Provider>
     </div>

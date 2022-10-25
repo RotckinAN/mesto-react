@@ -1,9 +1,9 @@
 import PopupWithForm from "./PopupWithForm";
 import React from "react";
 
-function ConfirmationPopup({name, title, value, additionalClassName}) {
+function ConfirmationPopup() {
     return (
-        <PopupWithForm name={name} title={title} additionalClassName={additionalClassName} value={value}/>
+        <PopupWithForm name='confirmDelete' title='Вы уверены?' additionalClassName='popup__content-title_type_confirmDelete' buttonText='Да'/>
     )
 }
 
