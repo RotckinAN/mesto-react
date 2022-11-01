@@ -2,7 +2,7 @@ import React from "react";
 import Card from "./Card";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
-function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, cards, onCardLike, onCardDelete}) {
+function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, cards, onCardLike, onDeleteButtonClick}) {
     const userContext = React.useContext(CurrentUserContext);
 
     return (
@@ -22,7 +22,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, cards, onCa
             <section className="elements" aria-label="Секция с картинками">
                 <ul className="elements__list">
                     {
-                        cards.map((card) => (<Card card={card} key={card._id} onCardClick={onCardClick} onCardLike={onCardLike} onCardDelete={onCardDelete} />))
+                        cards.map((card) => (<Card card={card} key={card._id} onCardClick={onCardClick} onCardLike={onCardLike} onDeleteButtonClick={onDeleteButtonClick} />))
                     }
                 </ul>
             </section>
