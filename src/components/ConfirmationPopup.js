@@ -10,7 +10,7 @@ function ConfirmationPopup({isLoading, onClose, actualCard, onCardDelete, isOpen
     }
 
     return (
-        <PopupWithForm name='confirmDelete' title='Вы уверены?' additionalClassName='popup__content-title_type_confirmDelete' isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} buttonText={buttonText}/>
+        <PopupWithForm name='confirmDelete' title='Вы уверены?' additionalClassName='popup__content-title_type_confirmDelete' isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} buttonText={buttonText} isFormValid={true}/>
     )
 }
 
